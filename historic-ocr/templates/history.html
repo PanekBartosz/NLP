@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historia OCR - Dokumenty historyczne</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Historia rozpoznawania tekstu</h1>
+        
+        <div class="nav-buttons">
+            <a href="/" class="btn">Powrót do głównej</a>
+        </div>
+        
+        <div class="history-list">
+            {% if results %}
+                {% for result in results %}
+                    <div class="history-item">
+                        <div class="history-info">
+                            <span class="filename">{{ result.filename }}</span>
+                            <span class="date">{{ result.created_at }}</span>
+                        </div>
+                        <div class="history-actions">
+                            <a href="/view/{{ result.id }}" class="btn">Zobacz szczegóły</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>Brak historii rozpoznawania.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

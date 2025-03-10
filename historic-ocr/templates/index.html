@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCR z YOLO - Rozpoznawanie tekstu w dokumentach historycznych</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>OCR z YOLO dla dokumentów historycznych</h1>
+        
+        <div class="nav-buttons">
+            <a href="/history" class="btn">Historia rozpoznawania</a>
+        </div>
+        
+        <div class="upload-section" id="dropzone">
+            <p>Przeciągnij i upuść obraz tutaj lub kliknij aby wybrać plik</p>
+            <input type="file" id="fileInput" class="hidden" accept="image/*">
+            <button id="uploadBtn" class="btn">Wybierz plik</button>
+        </div>
+        
+        <div class="image-container hidden" id="imageContainer">
+            <img src="" id="preview" alt="Podgląd obrazu">
+            <div id="overlayContainer"></div>
+        </div>
+        
+        <div class="loading hidden" id="loading">
+            <div class="spinner"></div>
+            <p>Przetwarzanie obrazu...</p>
+        </div>
+        
+        <div class="results hidden" id="results">
+            <h2>Wykryty tekst:</h2>
+            <div id="textResults"></div>
+            
+            <div class="result-actions">
+                <a id="viewResultBtn" class="btn">Zobacz szczegóły</a>
+                <button id="copyTextBtn" class="btn">Kopiuj tekst</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

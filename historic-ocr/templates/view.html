@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Szczegóły wyniku OCR</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>  
+        <div class="result-details">
+            <div class="image-container">
+                <img src="data:image/jpeg;base64,{{ result.image }}" alt="Oryginalny obraz">
+                <div class="overlay-container">
+                    {% for text in result.results %}
+                        <div class="text-overlay" style="left: {{ text.region[0] }}px; top: {{ text.region[1] }}px; width: {{ text.region[2] - text.region[0] }}px; height: {{ text.region[3] - text.region[1] }}px;">
+                            <span class="confidence">{{ "%.2f"|format(text.confidence*100) }}%</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="text-results">
+                <h2>Rozpoznany tekst:</h2>
+                {% for text in result.results %}
+                    <div class="text-block">
+                        <p class="text">{{ text.text }}</p>
+                        <p class="confidence">Pewność: {{ "%.2f"|format(text.confidence*100) }}%</p>
+                    </div>
+                {% endfor %}
+                
+                <button id="copyAllText" class="btn">Kopiuj cały tekst</button>
+            </div>
+            
+            <div class="processing-info">
+                <p>Czas przetwarzania: {{ "%.2f"|format(result.processing_time) }} sekund</p>
+                <p>Data utworzenia: {{ result.created_at }}</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('copyAllText').addEventListener('click', function() {
+            const texts = Array.from(document.querySelectorAll('.text-block .text'))
+                .map(el => el.textContent)
+                .join('\n');
+            
+            navigator.clipboard.writeText(texts).then(() => {
+                alert('Tekst skopiowany do schowka!');
+            });
+        });
+    </script>
+</body>
+</html>

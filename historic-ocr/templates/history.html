@@ -5,13 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Historia OCR - Dokumenty historyczne</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
         <h1>Historia rozpoznawania tekstu</h1>
         
         <div class="nav-buttons">
-            <a href="/" class="btn">Powrót do głównej</a>
+            <a href="/" class="btn btn-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+                Powrót do głównej
+            </a>
         </div>
         
         <div class="history-list">
@@ -19,16 +26,28 @@
                 {% for result in results %}
                     <div class="history-item">
                         <div class="history-info">
-                            <span class="filename">{{ result.filename }}</span>
-                            <span class="date">{{ result.created_at }}</span>
+                            <div class="filename">{{ result.filename }}</div>
+                            <div class="date">{{ result.created_at }}</div>
                         </div>
                         <div class="history-actions">
-                            <a href="/view/{{ result.id }}" class="btn">Zobacz szczegóły</a>
+                            <a href="/view/{{ result.id }}" class="btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                                Zobacz szczegóły
+                            </a>
                         </div>
                     </div>
                 {% endfor %}
             {% else %}
-                <p>Brak historii rozpoznawania.</p>
+                <div class="empty-state">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/>
+                        <polyline points="13 2 13 9 20 9"/>
+                    </svg>
+                    <p>Brak historii rozpoznawania</p>
+                </div>
             {% endif %}
         </div>
     </div>

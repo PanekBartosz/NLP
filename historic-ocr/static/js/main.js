@@ -13,6 +13,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     let currentResultId = null;
     
+    // Ukryj sekcję wyników na starcie
+    results.classList.add('hidden');
+    
     // Obsługa przycisku wyboru pliku
     uploadBtn.addEventListener('click', function() {
         fileInput.click();
@@ -57,6 +60,8 @@ document.addEventListener('DOMContentLoaded', function() {
             preview.src = e.target.result;
             imageContainer.classList.remove('hidden');
             overlayContainer.innerHTML = '';
+            // Ukryj wyniki z poprzedniego przetwarzania
+            results.classList.add('hidden');
         };
         reader.onerror = function(e) {
             alert('Błąd podczas wczytywania pliku: ' + e.target.error);
@@ -68,7 +73,6 @@ document.addEventListener('DOMContentLoaded', function() {
         formData.append('file', file);
         
         loading.classList.remove('hidden');
-        results.classList.add('hidden');
         
         fetch('/api/ocr', {
             method: 'POST',
@@ -88,9 +92,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('Wystąpił błąd: ' + data.error);
                 return;
             }
-            currentResultId = data.result_id;
-            viewResultBtn.href = `/view/${currentResultId}`;
-            showResults(data);
+            
+            // Pokaż wyniki tylko jeśli są jakieś wykryte teksty
+            if (data.detected_texts && data.detected_texts.length > 0) {
+                currentResultId = data.result_id;
+                viewResultBtn.href = `/view/${currentResultId}`;
+                showResults(data);
+                results.classList.remove('hidden');
+            } else {
+                // Jeśli nie wykryto tekstu, pokaż informację
+                results.classList.remove('hidden');
+                textResults.innerHTML = '<div class="text-block"><p>Nie wykryto żadnego tekstu na obrazie.</p></div>';
+            }
         })
         .catch(error => {
             loading.classList.add('hidden');
@@ -105,11 +118,14 @@ document.addEventListener('DOMContentLoaded', function() {
         if (data.detected_texts && data.detected_texts.length > 0) {
             let allText = '';
             
-            // Dla każdego wykrytego regionu tekstu
             data.detected_texts.forEach((item, index) => {
                 // Dodanie tekstu do wyników
                 const textElement = document.createElement('div');
-                textElement.innerHTML = `<strong>Tekst ${index + 1}:</strong> ${item.text}`;
+                textElement.className = 'text-block';
+                textElement.innerHTML = `
+                    <p class="text">Tekst ${index + 1}: ${item.text}</p>
+                    <p class="confidence">Pewność: ${item.confidence.toFixed(2)}%</p>
+                `;
                 textResults.appendChild(textElement);
                 
                 allText += item.text + '\n';
@@ -118,7 +134,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 const overlay = document.createElement('div');
                 overlay.className = 'text-overlay';
                 
-                // Obliczenie pozycji i rozmiaru nakładki
                 const imgRect = preview.getBoundingClientRect();
                 const scaleX = imgRect.width / preview.naturalWidth;
                 const scaleY = imgRect.height / preview.naturalHeight;
@@ -133,17 +148,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 overlayContainer.appendChild(overlay);
             });
             
-            // Zapisanie całego tekstu do kopiowania
-            copyTextBtn.addEventListener('click', function() {
+            // Obsługa kopiowania tekstu
+            copyTextBtn.onclick = function() {
                 navigator.clipboard.writeText(allText).then(() => {
                     alert('Tekst skopiowany do schowka!');
                 });
-            });
-            
-            results.classList.remove('hidden');
-        } else {
-            textResults.innerHTML = '<p>Nie wykryto żadnego tekstu na obrazie.</p>';
-            results.classList.remove('hidden');
+            };
         }
     }
 });

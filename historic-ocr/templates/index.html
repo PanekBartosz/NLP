@@ -3,18 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OCR z YOLO - Rozpoznawanie tekstu w dokumentach historycznych</title>
+    <title>OCR dla dokumentów historycznych</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <h1>OCR z YOLO dla dokumentów historycznych</h1>
+        <h1>OCR dla dokumentów historycznych</h1>
         
         <div class="nav-buttons">
-            <a href="/history" class="btn">Historia rozpoznawania</a>
+            <a href="/history" class="btn btn-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                Historia rozpoznawania
+            </a>
         </div>
         
         <div class="upload-section" id="dropzone">
+            <svg xmlns="http://www.w3.org/2000/svg" class="upload-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
             <p>Przeciągnij i upuść obraz tutaj lub kliknij aby wybrać plik</p>
             <input type="file" id="fileInput" class="hidden" accept="image/*">
             <button id="uploadBtn" class="btn">Wybierz plik</button>
@@ -32,11 +43,23 @@
         
         <div class="results hidden" id="results">
             <h2>Wykryty tekst:</h2>
-            <div id="textResults"></div>
+            <div id="textResults" class="text-results"></div>
             
             <div class="result-actions">
-                <a id="viewResultBtn" class="btn">Zobacz szczegóły</a>
-                <button id="copyTextBtn" class="btn">Kopiuj tekst</button>
+                <a id="viewResultBtn" class="btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                    Zobacz szczegóły
+                </a>
+                <button id="copyTextBtn" class="btn btn-secondary">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/>
+                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                    </svg>
+                    Kopiuj tekst
+                </button>
             </div>
         </div>
     </div>
